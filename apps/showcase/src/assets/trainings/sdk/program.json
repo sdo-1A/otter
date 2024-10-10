@@ -16,14 +16,14 @@
     "htmlContentUrl": "./steps/plugins/instructions.html"
   },
   {
-    "title": "Integrate your component in Angular",
+    "title": "Integrate your SDK in Angular",
     "htmlContentUrl": "./steps/angular-integration/instructions.html",
     "filesConfiguration": {
       "name": "angular-integration",
       "startingFile": "apps/tutorial-app/src/app/app.component.ts",
       "urls": {
         ".": "./shared/monorepo-template.json",
-        "./libs/sdk/src": "@o3r/training-sdk/folder-structure.json"
+        "./libs/sdk/src": "@o3r/training-sdk/structure/src.json"
       },
       "mode": "interactive",
       "commands": ["npm install --legacy-peer-deps --ignore-scripts --force", "npm run ng run sdk:build", "npm run ng run tutorial-app:serve"]
@@ -36,7 +36,7 @@
       "name": "sdk-specification",
       "startingFile": "open-api.yaml",
       "solutionUrls": {
-        ".": "@o3r/training-sdk/openapi-structure.json"
+        ".": "@o3r/training-sdk/structure/spec.json"
       },
       "mode": "readonly",
       "commands": []
@@ -49,8 +49,8 @@
       "name": "generate-sdk",
       "startingFile": "src/api/dummy/dummy-api.ts",
       "solutionUrls": {
-        "src": "@o3r/training-sdk/folder-structure.json",
-        ".": "@o3r/training-sdk/openapi-structure.json"
+        "src": "@o3r/training-sdk/structure/src.json",
+        ".": "@o3r/training-sdk/structure/spec.json"
       },
       "mode": "readonly",
       "commands": []
@@ -63,11 +63,11 @@
       "name": "generate-date-sdk",
       "startingFile": "open-api.yaml",
       "urls": {
-        ".": "@o3r/training-sdk/openapi-structure.json"
+        ".": "@o3r/training-sdk/structure/spec.json"
       },
       "solutionUrls": {
-        ".": "@o3r/training-sdk/openapi-structure.json",
-        "./src": "@o3r/training-sdk/folder-structure.json"
+        ".": "@o3r/training-sdk/structure/spec.json",
+        "./src": "@o3r/training-sdk/structure/src.json"
       },
       "mode": "readonly",
       "commands": []
@@ -80,7 +80,7 @@
       "name": "utils-date",
       "startingFile": "apps/app/src/app/app.component.ts",
       "urls": {
-        ".": "./shared/empty.json",
+        ".": "./shared/monorepo-with-app.json",
         "./apps/app/src/app": "./steps/date/exercise.json"
       },
       "solutionUrls": {
