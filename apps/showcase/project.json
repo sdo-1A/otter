@@ -94,7 +94,7 @@
           {
             "glob": "*.json",
             "input": "packages/@o3r/training-sdk/dist/structure",
-            "output": "/assets/@o3r/training-sdk/structure"
+            "output": "/assets/o3r/training-sdk/structure"
           }
         ],
         "styles": [
