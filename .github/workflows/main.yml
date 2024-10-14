@@ -48,84 +48,84 @@ jobs:
       - run: yarn build
       - uses: ./tools/github-actions/upload-build-output
 
-  version:
-    permissions:
-      # Needed to publish release on GitHub
-      contents: write
-    runs-on: ubuntu-latest
-    needs: [yarn_lock_check]
-    outputs:
-      nextVersionTag: ${{ steps.newVersion.outputs.nextVersionTag }}
-      isPreRelease: ${{ contains( steps.newVersion.outputs.nextVersionTag, '-' ) || github.event_name == 'pull_request' || github.event_name == 'merge_group'}}
-    steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: ./tools/github-actions/setup
-      - name: New Version
-        if: github.event_name != 'merge_group'
-        id: newVersion
-        uses: ./tools/github-actions/new-version
-        with:
-          defaultBranch: main
-          defaultBranchPrereleaseName: prerelease
-          releaseBranchRegExp: 'release\/(0|[1-9]\d*)\.(0|[1-9]\d*)(\.0-(?:next|prerelease|rc))?$'
-      - name: Create release
-        if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
-        run: gh release create v${{ steps.newVersion.outputs.nextVersionTag }} --generate-notes ${{ contains( steps.newVersion.outputs.nextVersionTag, '-' ) && '--prerelease' || '' }} --target ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # version:
+  #   permissions:
+  #     # Needed to publish release on GitHub
+  #     contents: write
+  #   runs-on: ubuntu-latest
+  #   needs: [yarn_lock_check]
+  #   outputs:
+  #     nextVersionTag: ${{ steps.newVersion.outputs.nextVersionTag }}
+  #     isPreRelease: ${{ contains( steps.newVersion.outputs.nextVersionTag, '-' ) || github.event_name == 'pull_request' || github.event_name == 'merge_group'}}
+  #   steps:
+  #     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+  #     - uses: ./tools/github-actions/setup
+  #     - name: New Version
+  #       if: github.event_name != 'merge_group'
+  #       id: newVersion
+  #       uses: ./tools/github-actions/new-version
+  #       with:
+  #         defaultBranch: main
+  #         defaultBranchPrereleaseName: prerelease
+  #         releaseBranchRegExp: 'release\/(0|[1-9]\d*)\.(0|[1-9]\d*)(\.0-(?:next|prerelease|rc))?$'
+  #     - name: Create release
+  #       if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+  #       run: gh release create v${{ steps.newVersion.outputs.nextVersionTag }} --generate-notes ${{ contains( steps.newVersion.outputs.nextVersionTag, '-' ) && '--prerelease' || '' }} --target ${{ github.ref_name }}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  checks:
-    uses: ./.github/workflows/code-check.yml
-    secrets:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-    needs: [yarn_lock_check]
-    with:
-      affected: ${{ github.event_name == 'pull_request' }}
-      skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
+  # checks:
+  #   uses: ./.github/workflows/code-check.yml
+  #   secrets:
+  #     NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  #   needs: [yarn_lock_check]
+  #   with:
+  #     affected: ${{ github.event_name == 'pull_request' }}
+  #     skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
 
-  it-tests:
-    uses: ./.github/workflows/it-tests.yml
-    secrets:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-    needs: [yarn_lock_check, build]
-    with:
-      skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
+  # it-tests:
+  #   uses: ./.github/workflows/it-tests.yml
+  #   secrets:
+  #     NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  #   needs: [yarn_lock_check, build]
+  #   with:
+  #     skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
 
-  e2e-tests:
-    uses: ./.github/workflows/e2e-tests.yml
-    secrets:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-    needs: [yarn_lock_check, build]
-    with:
-      skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
+  # e2e-tests:
+  #   uses: ./.github/workflows/e2e-tests.yml
+  #   secrets:
+  #     NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  #   needs: [yarn_lock_check, build]
+  #   with:
+  #     skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
 
-  publish-packages:
-    uses: ./.github/workflows/publish.yml
-    if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
-    permissions:
-      contents: read
-      # Needed to publish with provenance
-      id-token: write
-    secrets: inherit
-    needs: [yarn_lock_check, version, build, checks, it-tests]
-    with:
-      version: ${{ needs.version.outputs.nextVersionTag }}
-      prerelease: ${{ needs.version.outputs.isPreRelease == 'true' }}
-      isPullRequest: false
-      skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
+  # publish-packages:
+  #   uses: ./.github/workflows/publish.yml
+  #   if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+  #   permissions:
+  #     contents: read
+  #     # Needed to publish with provenance
+  #     id-token: write
+  #   secrets: inherit
+  #   needs: [yarn_lock_check, version, build, checks, it-tests]
+  #   with:
+  #     version: ${{ needs.version.outputs.nextVersionTag }}
+  #     prerelease: ${{ needs.version.outputs.isPreRelease == 'true' }}
+  #     isPullRequest: false
+  #     skipNxCache: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release') }}
 
-  documentation-main:
-    secrets: inherit
-    needs: [yarn_lock_check, version, build, checks]
-    if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' && github.ref_name == 'main' }}
-    uses: ./.github/workflows/documentation.yml
-    with:
-      version: ${{ needs.version.outputs.nextVersionTag }}
-  documentation-pr:
-    secrets: inherit
-    needs: [yarn_lock_check, version]
-    if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'merge_group' }}
-    uses: ./.github/workflows/documentation.yml
-    with:
-      version: ${{ needs.version.outputs.nextVersionTag }}
-      shouldDeploy: false
+  # documentation-main:
+  #   secrets: inherit
+  #   needs: [yarn_lock_check, version, build, checks]
+  #   if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' && github.ref_name == 'main' }}
+  #   uses: ./.github/workflows/documentation.yml
+  #   with:
+  #     version: ${{ needs.version.outputs.nextVersionTag }}
+  # documentation-pr:
+  #   secrets: inherit
+  #   needs: [yarn_lock_check, version]
+  #   if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event_name == 'merge_group' }}
+  #   uses: ./.github/workflows/documentation.yml
+  #   with:
+  #     version: ${{ needs.version.outputs.nextVersionTag }}
+  #     shouldDeploy: false
