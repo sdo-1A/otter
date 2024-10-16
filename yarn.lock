@@ -8911,6 +8911,7 @@ __metadata:
     "@o3r/schematics": "workspace:^"
     "@o3r/styling": "workspace:^"
     "@o3r/testing": "workspace:^"
+    "@o3r/training-sdk": "workspace:^"
     "@o3r/training-tools": "workspace:^"
     "@playwright/test": "npm:~1.47.0"
     "@popperjs/core": "npm:^2.11.5"
@@ -8947,7 +8948,7 @@ __metadata:
     jsonc-eslint-parser: "npm:~2.4.0"
     lighthouse: "npm:~12.2.0"
     minimist: "npm:^1.2.6"
-    monaco-editor: "npm:~0.51.0"
+    monaco-editor: "npm:~0.50.0"
     ngx-highlightjs: "npm:^12.0.0"
     ngx-monaco-editor-v2: "npm:^18.0.0"
     ngx-monaco-tree: "npm:^18.1.0"
@@ -9643,7 +9644,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@o3r/training-sdk@workspace:packages/@o3r/training-sdk":
+"@o3r/training-sdk@workspace:^, @o3r/training-sdk@workspace:packages/@o3r/training-sdk":
   version: 0.0.0-use.local
   resolution: "@o3r/training-sdk@workspace:packages/@o3r/training-sdk"
   dependencies:
@@ -25238,10 +25239,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monaco-editor@npm:~0.51.0":
-  version: 0.51.0
-  resolution: "monaco-editor@npm:0.51.0"
-  checksum: 10/2d4f076e35edb32add51b9b7a0ff5a7a81bf946cdeda9983ab6b24c2e5b84f537d5a5c781925d7ee8c898e890212b379d3c96139a965ad1004e6dd3d890163fa
+"monaco-editor@npm:~0.50.0":
+  version: 0.50.0
+  resolution: "monaco-editor@npm:0.50.0"
+  checksum: 10/594f2a3812147c1ef41c4dba444c649c32af95c3eb09529049bb7a2cb38e1747facbae0a459a07140e77cf9d73df41f034399804f9123f9cfff45394321a3983
   languageName: node
   linkType: hard
 
