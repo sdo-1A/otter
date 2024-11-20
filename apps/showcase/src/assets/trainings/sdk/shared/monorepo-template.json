@@ -65,7 +65,7 @@
                     },
                     "app.config.ts": {
                       "file": {
-                        "contents": "import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';\nimport { provideRouter } from '@angular/router';\n\nimport { routes } from './app.routes';\nimport { StorageSync } from '@o3r/store-sync';\nimport { RuntimeChecks, StoreModule } from '@ngrx/store';\nimport { Serializer } from '@o3r/core';\nimport { environment, additionalModules } from '../environments/environment';\nimport { EffectsModule } from '@ngrx/effects';\nimport { prefersReducedMotion } from '@o3r/application';\nimport { BrowserAnimationsModule } from '@angular/platform-browser/animations';\n\nconst localStorageStates: Record<string, Serializer<any>>[] = [/* Store to register in local storage */];\nconst storageSync = new StorageSync({\n  keys: localStorageStates, rehydrate: true\n});\n\nconst rootReducers = {\n  \n};\n\nconst metaReducers = [storageSync.localStorageSync()];\nconst runtimeChecks: Partial<RuntimeChecks> = {\n  strictActionImmutability: false,\n  strictActionSerializability: false,\n  strictActionTypeUniqueness: !environment.production,\n  strictActionWithinNgZone: !environment.production,\n  strictStateImmutability: !environment.production,\n  strictStateSerializability: false\n};\n\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideRouter(routes),\n    importProvidersFrom(EffectsModule.forRoot([])),\n    importProvidersFrom(StoreModule.forRoot(rootReducers, {metaReducers, runtimeChecks})),\n    importProvidersFrom(additionalModules),\n    importProvidersFrom(BrowserAnimationsModule.withConfig({disableAnimations: prefersReducedMotion()}))\n  ]\n};\n"
+                        "contents": "import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';\nimport { provideRouter } from '@angular/router';\n\nimport { routes } from './app.routes';\nimport { prefersReducedMotion } from '@o3r/application';\nimport { BrowserAnimationsModule } from '@angular/platform-browser/animations';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideRouter(routes),\n    importProvidersFrom(BrowserAnimationsModule.withConfig({disableAnimations: prefersReducedMotion()}))\n  ]\n};\n"
                       }
                     },
                     "app.routes.ts": {
@@ -79,7 +79,7 @@
                   "directory": {
                     "environment.development.ts": {
                       "file": {
-                        "contents": "import { StoreDevtoolsModule } from '@ngrx/store-devtools';\n\nexport const environment = {\n  production: false,\n};\n\nexport const additionalModules = [\n  StoreDevtoolsModule.instrument()\n];\n"
+                        "contents": "export const environment = {\n  production: false,\n};\n\nexport const additionalModules = [];\n"
                       }
                     },
                     "environment.ts": {
